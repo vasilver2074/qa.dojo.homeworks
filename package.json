@@ -1,0 +1,14 @@
+{
+  "name": "qa-dojo-7-practice",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "Valerii Silvanovych",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {},
+  "devDependencies": {
+    "@playwright/test": "^1.55.1",
+    "@types/node": "^24.6.2"
+  }
+}
