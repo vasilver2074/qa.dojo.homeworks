@@ -44,6 +44,7 @@ test.describe("Coffee-cart tests", () => {
     await expect(page.locator('[data-test="checkout"]')).toBeVisible();
     await expect(page.locator('[data-test="checkout"]')).toContainText("$18.00");
     await page.getByRole('link', { name: 'Cart page' }).click();
+    await expect(page).toHaveTitle(/Coffee cart/);
     await expect(page.locator('[data-test="checkout"]')).toBeVisible();
     await expect(page.locator('[data-test="checkout"]')).toContainText("$18.00");
     await page.locator('[data-test="checkout"]').click();
@@ -59,7 +60,7 @@ test.describe("Coffee-cart tests", () => {
     ).not.toBeVisible();
   });
 
-  test('PS-004 After adding 3 coffee to cart appear Extra coffee message', async ({ page }) => {
+  test('PS-005 After adding 3 coffee to cart appear Extra coffee message', async ({ page }) => {
   await page.goto('https://coffee-cart.app/');
   await page.locator('[data-test="Cappuccino"]').click();
   await page.locator('[data-test="Mocha"]').click();
