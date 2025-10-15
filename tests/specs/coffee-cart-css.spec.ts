@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Coffee-cart tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://coffee-cart.app/");
+  });
+
   test(
     "PS-001 Verify Mocha is successfully added to Total",
     {
@@ -11,12 +15,11 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
       await page.locator('[data-test="Mocha"]').click();
       await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect.soft(page.locator('[data-test="checkout"]')).toContainText(
-        "$8.00"
-      );
+      await expect
+        .soft(page.locator('[data-test="checkout"]'))
+        .toContainText("$8.00");
       await page.locator('[data-test="checkout"]').hover();
       await expect.soft(page.locator("#app")).toContainText("Mocha x 1+-");
     }
@@ -33,20 +36,15 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
       await page.locator('[data-test="Cappuccino"]').click();
       await expect(page.locator('[data-test="checkout"]')).toBeVisible();
       await page.locator('[data-test="checkout"]').click();
       await page.locator("#name").fill("test");
       await page.locator("#email").fill("test@gmail.com");
       await page.locator("#promotion").check();
-      await expect.soft(
-        page.locator(".modal-content h1"))
-      .toBeVisible();
+      await expect.soft(page.locator(".modal-content h1")).toBeVisible();
       await page.locator("#submit-payment").click();
-      await expect.soft(
-        page.locator(".modal-content h1")
-      ).not.toBeVisible();
+      await expect.soft(page.locator(".modal-content h1")).not.toBeVisible();
     }
   );
 
@@ -60,17 +58,16 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
       await page.locator('[data-test="Americano"]').click();
       await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect.soft(page.locator('[data-test="checkout"]')).toContainText(
-        "$7.00"
-      );
+      await expect
+        .soft(page.locator('[data-test="checkout"]'))
+        .toContainText("$7.00");
       await page.locator('[aria-label="Cart page"]').click();
       await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect.soft(page.locator('[data-test="checkout"]')).toContainText(
-        "$7.00"
-      );
+      await expect
+        .soft(page.locator('[data-test="checkout"]'))
+        .toContainText("$7.00");
     }
   );
 
@@ -85,29 +82,24 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
       await page.locator('[data-test="Flat_White"]').click();
       await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect.soft(page.locator('[data-test="checkout"]')).toContainText(
-        "$18.00"
-      );
+      await expect
+        .soft(page.locator('[data-test="checkout"]'))
+        .toContainText("$18.00");
       await page.locator('[aria-label="Cart page"]').click();
       await expect.soft(page).toHaveTitle(/Coffee cart/);
       await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect.soft(page.locator('[data-test="checkout"]')).toContainText(
-        "$18.00"
-      );
+      await expect
+        .soft(page.locator('[data-test="checkout"]'))
+        .toContainText("$18.00");
       await page.locator('[data-test="checkout"]').click();
       await page.locator("#name").fill("test");
       await page.locator("#email").fill("test@gmail.com");
       await page.locator("#promotion").check();
-      await expect.soft(
-        page.locator("#app .list .modal h1")
-      ).toBeVisible();
+      await expect.soft(page.locator("#app .list .modal h1")).toBeVisible();
       await page.locator("#submit-payment").click();
-      await expect.soft(
-        page.locator("#app .list .modal h1")
-      ).not.toBeVisible();
+      await expect.soft(page.locator("#app .list .modal h1")).not.toBeVisible();
     }
   );
 
@@ -122,13 +114,14 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
       await page.locator('[data-test="Cappuccino"]').click();
       await page.locator('[data-test="Mocha"]').click();
       await page.locator('[data-test="Flat_White"]').click();
-      await expect.soft(page.locator("#app")).toContainText(
-        "It's your lucky day! Get an extra cup of Mocha for $4."
-      );
+      await expect
+        .soft(page.locator("#app"))
+        .toContainText(
+          "It's your lucky day! Get an extra cup of Mocha for $4."
+        );
     }
   );
 });

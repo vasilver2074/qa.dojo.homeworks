@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Playwright dev tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://playwright.dev/");
+  });
+
   test(
     "PS-001 Verify user is able to switch between dark and light mode",
     {
@@ -12,8 +16,6 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
-
       await page
         .locator(
           '[aria-label="Switch between dark and light mode (currently system mode)"]'
@@ -39,7 +41,6 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
       await page.locator('[aria-label="Discord server"]').click();
       const pagePromise = page.waitForEvent("popup");
       const newTab = await pagePromise;
@@ -58,7 +59,6 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
       await page.locator('a.navbar__link[href="/docs/intro"]').click();
       await expect
         .soft(page.locator('a.navbar__link[href="/docs/intro"]'))
@@ -84,9 +84,7 @@ test.describe("Playwright dev tests", () => {
         .toHaveText("Playwright Library");
 
       await page.locator('[href="/community/welcome"]').click();
-      await expect
-        .soft(page.locator("header h1"))
-        .toHaveText("Welcome");
+      await expect.soft(page.locator("header h1")).toHaveText("Welcome");
     }
   );
 
@@ -100,7 +98,6 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
       await page.locator(".DocSearch-Button-Placeholder").click();
       await page.locator("#docsearch-input").fill("Installation");
       await page
