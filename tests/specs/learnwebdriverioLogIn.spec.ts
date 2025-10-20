@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("learn webdriverio Log In tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://demo.learnwebdriverio.com/login");
+  });
   test(
     "PS-001 Verify user is able to Log In successfully",
     {
@@ -11,11 +14,15 @@ test.describe("learn webdriverio Log In tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://demo.learnwebdriverio.com/login");
-      await page.getByRole("textbox", { name: "Email" }).fill("test3@gmail.com");
-      await page.getByRole("textbox", { name: "Password" }).fill("test123");
-      await page.getByRole("button", { name: "Sign in" }).click();
-      await expect( page.getByText('A place to share your')).toBeVisible();
+      const email = page.getByRole("textbox", { name: "Email" });
+      const password = page.getByRole("textbox", { name: "Password" });
+      const signInButton = page.getByRole("button", { name: "Sign in" });
+      const message = page.getByText("A place to share your");
+
+      await email.fill("test3@gmail.com");
+      await password.fill("test123");
+      await signInButton.click();
+      await expect(message).toBeVisible();
     }
   );
 
@@ -29,10 +36,13 @@ test.describe("learn webdriverio Log In tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://demo.learnwebdriverio.com/login");
-      await page.getByRole("textbox", { name: "Password" }).fill("test123");
-      await page.getByRole("button", { name: "Sign in" }).click();
-      await expect( page.getByText('email can\'t be blank')).toBeVisible();
+      const password = page.getByRole("textbox", { name: "Password" });
+      const signInButton = page.getByRole("button", { name: "Sign in" });
+      const errorMessage = page.getByText("email can't be blank");
+
+      await password.fill("test123");
+      await signInButton.click();
+      await expect(errorMessage).toBeVisible();
     }
   );
 
@@ -46,11 +56,15 @@ test.describe("learn webdriverio Log In tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://demo.learnwebdriverio.com/login");
-      await page.getByRole("textbox", { name: "Email" }).fill("test3@gmail.com");
-      await page.getByRole("textbox", { name: "Password" }).fill("test12");
-      await page.getByRole("button", { name: "Sign in" }).click();
-      await expect( page.getByText('email or password is invalid')).toBeVisible();
+      const email = page.getByRole("textbox", { name: "Email" });
+      const password = page.getByRole("textbox", { name: "Password" });
+      const signInButton = page.getByRole("button", { name: "Sign in" });
+      const errorMessage = page.getByText("email or password is invalid");
+
+      await email.fill("test3@gmail.com");
+      await password.fill("test12");
+      await signInButton.click();
+      await expect(errorMessage).toBeVisible();
     }
   );
 });

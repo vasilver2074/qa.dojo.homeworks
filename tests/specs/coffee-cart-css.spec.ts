@@ -15,13 +15,15 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[data-test="Mocha"]').click();
-      await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect
-        .soft(page.locator('[data-test="checkout"]'))
-        .toContainText("$8.00");
-      await page.locator('[data-test="checkout"]').hover();
-      await expect.soft(page.locator("#app")).toContainText("Mocha x 1+-");
+      const coffeeMocha = page.locator('[data-test="Mocha"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const app = page.locator("#app");
+
+      await coffeeMocha.click();
+      await expect.soft(checkout).toBeVisible();
+      await expect.soft(checkout).toContainText("$8.00");
+      await checkout.hover();
+      await expect.soft(app).toContainText("Mocha x 1+-");
     }
   );
 
@@ -36,15 +38,23 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[data-test="Cappuccino"]').click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await page.locator('[data-test="checkout"]').click();
-      await page.locator("#name").fill("test");
-      await page.locator("#email").fill("test@gmail.com");
-      await page.locator("#promotion").check();
-      await expect.soft(page.locator(".modal-content h1")).toBeVisible();
-      await page.locator("#submit-payment").click();
-      await expect.soft(page.locator(".modal-content h1")).not.toBeVisible();
+      const coffeeCapuccino = page.locator('[data-test="Cappuccino"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const name = page.getByRole("textbox", { name: "Name" });
+      const email = page.getByRole("textbox", { name: "Email" });
+      const checkbox = page.locator("#promotion");
+      const paymentDetails = page.locator(".modal-content h1");
+      const submeetButton = page.locator("#submit-payment");
+
+      await coffeeCapuccino.click();
+      await expect(checkout).toBeVisible();
+      await checkout.click();
+      await name.fill("test");
+      await email.fill("test@gmail.com");
+      await checkbox.check();
+      await expect.soft(paymentDetails).toBeVisible();
+      await submeetButton.click();
+      await expect.soft(paymentDetails).not.toBeVisible();
     }
   );
 
@@ -58,16 +68,16 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[data-test="Americano"]').click();
-      await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect
-        .soft(page.locator('[data-test="checkout"]'))
-        .toContainText("$7.00");
-      await page.locator('[aria-label="Cart page"]').click();
-      await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect
-        .soft(page.locator('[data-test="checkout"]'))
-        .toContainText("$7.00");
+      const coffeeAmericano = page.locator('[data-test="Americano"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const cartPage = page.locator('[aria-label="Cart page"]');
+
+      await coffeeAmericano.click();
+      await expect.soft(checkout).toBeVisible();
+      await expect.soft(checkout).toContainText("$7.00");
+      await cartPage.click();
+      await expect.soft(checkout).toBeVisible();
+      await expect.soft(checkout).toContainText("$7.00");
     }
   );
 
@@ -82,24 +92,29 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[data-test="Flat_White"]').click();
-      await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect
-        .soft(page.locator('[data-test="checkout"]'))
-        .toContainText("$18.00");
-      await page.locator('[aria-label="Cart page"]').click();
+      const coffeeFlat_White = page.locator('[data-test="Flat_White"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const cartPage = page.locator('[aria-label="Cart page"]');
+      const name = page.locator("#name");
+      const email = page.locator("#email");
+      const checkbox = page.locator("#promotion");
+      const paymentDetails = page.locator("#app .list .modal h1");
+      const submeetButton = page.locator("#submit-payment");
+
+      await coffeeFlat_White.click();
+      await expect.soft(checkout).toBeVisible();
+      await expect.soft(checkout).toContainText("$18.00");
+      await cartPage.click();
       await expect.soft(page).toHaveTitle(/Coffee cart/);
-      await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect
-        .soft(page.locator('[data-test="checkout"]'))
-        .toContainText("$18.00");
-      await page.locator('[data-test="checkout"]').click();
-      await page.locator("#name").fill("test");
-      await page.locator("#email").fill("test@gmail.com");
-      await page.locator("#promotion").check();
-      await expect.soft(page.locator("#app .list .modal h1")).toBeVisible();
-      await page.locator("#submit-payment").click();
-      await expect.soft(page.locator("#app .list .modal h1")).not.toBeVisible();
+      await expect.soft(checkout).toBeVisible();
+      await expect.soft(checkout).toContainText("$18.00");
+      await checkout.click();
+      await name.fill("test");
+      await email.fill("test@gmail.com");
+      await checkbox.check();
+      await expect.soft(paymentDetails).toBeVisible();
+      await submeetButton.click();
+      await expect.soft(paymentDetails).not.toBeVisible();
     }
   );
 
@@ -114,11 +129,16 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[data-test="Cappuccino"]').click();
-      await page.locator('[data-test="Mocha"]').click();
-      await page.locator('[data-test="Flat_White"]').click();
+      const coffeeCappuccino = page.locator('[data-test="Cappuccino"]');
+      const coffeeMocha = page.locator('[data-test="Mocha"]');
+      const coffeeFlat_White = page.locator('[data-test="Flat_White"]');
+      const app = page.locator("#app");
+
+      await coffeeCappuccino.click();
+      await coffeeMocha.click();
+      await coffeeFlat_White.click();
       await expect
-        .soft(page.locator("#app"))
+        .soft(app)
         .toContainText(
           "It's your lucky day! Get an extra cup of Mocha for $4."
         );

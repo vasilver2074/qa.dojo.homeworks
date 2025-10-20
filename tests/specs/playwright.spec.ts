@@ -1,25 +1,26 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Playwright dev tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://playwright.dev/");
+  });
   test(
     "PS-001 Verify user is able to switch between dark and light mode",
     {
       tag: ["@positive"],
       annotation: {
         type: "description",
-        description: "After double click Playwright site displayed with dark mode",
+        description:
+          "After double click Playwright site displayed with dark mode",
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
-      await page
-        .getByRole("button", { name: "Switch between dark and light" })
-        .dblclick();
-      await expect
-        .soft(
-          page.getByRole("button", { name: "Switch between dark and light" })
-        )
-        .toHaveAttribute("title", "dark mode");
+      const buttonSwitch = page.getByRole("button", {
+        name: "Switch between dark and light",
+      });
+
+      await buttonSwitch.dblclick();
+      await expect.soft(buttonSwitch).toHaveAttribute("title", "dark mode");
     }
   );
 
@@ -29,12 +30,14 @@ test.describe("Playwright dev tests", () => {
       tag: ["@positive"],
       annotation: {
         type: "description",
-        description: "After tap on Discord server link user was navigated to Discord Servers site",
+        description:
+          "After tap on Discord server link user was navigated to Discord Servers site",
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
-      await page.getByRole("link", { name: "Discord server" }).click();
+      const discordButton = page.getByRole("link", { name: "Discord server" });
+
+      await discordButton.click();
       const pagePromise = page.waitForEvent("popup");
       const newTab = await pagePromise;
       await newTab.waitForLoadState();
@@ -52,29 +55,28 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
-      await page.getByRole("link", { name: "Docs" }).click();
-      await expect(page.getByRole("link", { name: "Docs" })).toBeVisible();
-      await expect(page.getByLabel("Main", { exact: true })).toContainText(
-        "Docs"
-      );
-      await expect(
-        page.getByRole("heading", { name: "Installation" })
-      ).toBeVisible();
+      const docsButton = page.getByRole("link", { name: "Docs" });
+      const installation = page.locator("header > h1");
+      const api = page.getByText("API", { exact: true });
+      const apiVisibility = page.getByLabel("Main", { exact: true });
+      const libraryVisibility = page.getByRole("heading", {
+        name: "Playwright Library",
+      });
+      const communityButton = page.getByRole("link", { name: "Community" });
+      const community = page.getByLabel("Main", { exact: true });
 
-      await page.getByText("API", { exact: true }).click();
-      await expect.soft(page.getByText("API", { exact: true })).toBeVisible();
-      await expect
-        .soft(page.getByLabel("Main", { exact: true }))
-        .toContainText("API");
-      await expect
-        .soft(page.getByRole("heading", { name: "Playwright Library" }))
-        .toBeVisible();
+      await docsButton.click();
+      await expect(docsButton).toBeVisible();
+      await expect(docsButton).toContainText("Docs");
+      await expect.soft(installation).toContainText("Installation");
 
-      await page.getByRole("link", { name: "Community" }).click();
-      await expect(page.getByLabel("Main", { exact: true })).toContainText(
-        "Community"
-      );
+      await api.click();
+      await expect.soft(api).toBeVisible();
+      await expect.soft(apiVisibility).toContainText("API");
+      await expect.soft(libraryVisibility).toBeVisible();
+
+      await communityButton.click();
+      await expect(community).toContainText("Community");
     }
   );
 
@@ -88,17 +90,18 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://playwright.dev/");
-      await page.getByRole("button", { name: "Search (Ctrl+K)" }).click();
-      await page
-        .getByRole("searchbox", { name: "Search" })
-        .fill("installation");
-      await page
-        .getByRole("link", { name: "Installation", exact: true })
-        .click();
-      await expect(
-        page.getByRole("heading", { name: "Installation" })
-      ).toBeVisible();
+      const search = page.getByRole("button", { name: "Search (Ctrl+K)" });
+      const searchField = page.getByRole("searchbox", { name: "Search" });
+      const chooseSearchResult = page.getByRole("link", {
+        name: "Installation",
+        exact: true,
+      });
+      const searchPage = page.getByRole("heading", { name: "Installation" });
+
+      await search.click();
+      await searchField.fill("installation");
+      await chooseSearchResult.click();
+      await expect(searchPage).toBeVisible();
     }
   );
 });

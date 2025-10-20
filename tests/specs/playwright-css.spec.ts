@@ -16,17 +16,15 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page
-        .locator(
-          '[aria-label="Switch between dark and light mode (currently system mode)"]'
-        )
-        .dblclick();
+      const buttonSwitchLight = page.locator(
+        '[aria-label="Switch between dark and light mode (currently system mode)"]'
+      );
+      const buttonSwitchNight = page.locator(
+        '[aria-label="Switch between dark and light mode (currently dark mode)"]'
+      );
 
-      await expect(
-        page.locator(
-          '[aria-label="Switch between dark and light mode (currently dark mode)"]'
-        )
-      ).toHaveAttribute("title", "dark mode");
+      await buttonSwitchLight.dblclick();
+      await expect.soft(buttonSwitchNight).toHaveAttribute("title", "dark mode");
     }
   );
 
@@ -41,7 +39,9 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('[aria-label="Discord server"]').click();
+      const discordButton = page.locator('[aria-label="Discord server"]');
+
+      await discordButton.click();
       const pagePromise = page.waitForEvent("popup");
       const newTab = await pagePromise;
       await newTab.waitForLoadState();
@@ -59,32 +59,26 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator('a.navbar__link[href="/docs/intro"]').click();
-      await expect
-        .soft(page.locator('a.navbar__link[href="/docs/intro"]'))
-        .toBeVisible();
-      await expect
-        .soft(page.locator('a.navbar__link[href="/docs/intro"]'))
-        .toContainText("Docs");
-      await expect
-        .soft(page.locator("header > h1"))
-        .toContainText("Installation");
+      const docsButton = page.locator('a.navbar__link[href="/docs/intro"]');
+      const installation = page.locator("header > h1");
+      const apiButton = page.locator(
+        'a.navbar__link[href="/docs/api/class-playwright"]'
+      );
+      const playwrightLibrary = page.locator("header h1");
+      const wellcome = page.locator('[href="/community/welcome"]');
 
-      await page
-        .locator('a.navbar__link[href="/docs/api/class-playwright"]')
-        .click();
-      await expect
-        .soft(page.locator('a.navbar__link[href="/docs/api/class-playwright"]'))
-        .toBeVisible();
-      await expect
-        .soft(page.locator('a.navbar__link[href="/docs/api/class-playwright"]'))
-        .toContainText("API");
-      await expect
-        .soft(page.locator("header h1"))
-        .toHaveText("Playwright Library");
+      await docsButton.click();
+      await expect.soft(docsButton).toBeVisible();
+      await expect.soft(docsButton).toContainText("Docs");
+      await expect.soft(installation).toContainText("Installation");
 
-      await page.locator('[href="/community/welcome"]').click();
-      await expect.soft(page.locator("header h1")).toHaveText("Welcome");
+      await apiButton.click();
+      await expect.soft(apiButton).toBeVisible();
+      await expect.soft(apiButton).toContainText("API");
+      await expect.soft(playwrightLibrary).toHaveText("Playwright Library");
+
+      await wellcome.click();
+      await expect.soft(playwrightLibrary).toHaveText("Welcome");
     }
   );
 
@@ -98,14 +92,17 @@ test.describe("Playwright dev tests", () => {
       },
     },
     async ({ page }) => {
-      await page.locator(".DocSearch-Button-Placeholder").click();
-      await page.locator("#docsearch-input").fill("Installation");
-      await page
-        .locator("#docsearch-hits0-item-0 .DocSearch-Hit-title")
-        .click();
-      await expect
-        .soft(page.locator("header > h1"))
-        .toContainText("Installation");
+      const search = page.locator(".DocSearch-Button-Placeholder");
+      const searchField = page.locator("#docsearch-input");
+      const chooseSearchResult = page.locator(
+        "#docsearch-hits0-item-0 .DocSearch-Hit-title"
+      );
+      const searchPage = page.locator("header > h1");
+
+      await search.click();
+      await searchField.fill("Installation");
+      await chooseSearchResult.click();
+      await expect.soft(searchPage).toContainText("Installation");
     }
   );
 });

@@ -1,0 +1,8 @@
+{
+    "user":{
+    "full_name": "John Black",
+    "email": "test@gmail.com",
+    "current_address": "New York",
+    "permanent_address": "Tokio"
+    }
+}

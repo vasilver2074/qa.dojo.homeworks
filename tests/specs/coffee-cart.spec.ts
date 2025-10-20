@@ -1,6 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("Coffee-cart tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto("https://coffee-cart.app/");
+  });
   test(
     "PS-001 Verify Mocha is successfully added to Total",
     {
@@ -11,14 +14,15 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
-      await page.locator('[data-test="Mocha"]').click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect(page.locator('[data-test="checkout"]')).toContainText(
-        "$8.00"
-      );
-      await page.locator('[data-test="checkout"]').hover();
-      await expect(page.locator("#app")).toContainText("Mocha x 1+-");
+      const coffeeMocha = page.locator('[data-test="Mocha"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const app = page.locator("#app");
+
+      await coffeeMocha.click();
+      await expect(checkout).toBeVisible();
+      await expect(checkout).toContainText("$8.00");
+      await checkout.hover();
+      await expect(app).toContainText("Mocha x 1+-");
     }
   );
 
@@ -33,20 +37,27 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
-      await page.locator('[data-test="Cappuccino"]').click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await page.locator('[data-test="checkout"]').click();
-      await page.getByRole("textbox", { name: "Name" }).fill("test");
-      await page.getByRole("textbox", { name: "Email" }).fill("test@gmail.com");
-      await page.getByRole("checkbox", { name: "Promotion checkbox" }).check();
-      await expect(
-        page.getByRole("heading", { name: "Payment details" })
-      ).toBeVisible();
-      await page.getByRole("button", { name: "Submit" }).click();
-      await expect(
-        page.getByRole("heading", { name: "Payment details" })
-      ).not.toBeVisible();
+      const coffeeCapuccino = page.locator('[data-test="Cappuccino"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const name = page.getByRole("textbox", { name: "Name" });
+      const email = page.getByRole("textbox", { name: "Email" });
+      const checkbox = page.getByRole("checkbox", {
+        name: "Promotion checkbox",
+      });
+      const paymentDetails = page.getByRole("heading", {
+        name: "Payment details",
+      });
+      const submeetButton = page.getByRole("button", { name: "Submit" });
+
+      await coffeeCapuccino.click();
+      await expect(checkout).toBeVisible();
+      await checkout.click();
+      await name.fill("test");
+      await email.fill("test@gmail.com");
+      await checkbox.check();
+      await expect(paymentDetails).toBeVisible();
+      await submeetButton.click();
+      await expect(paymentDetails).not.toBeVisible();
     }
   );
 
@@ -60,17 +71,16 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
-      await page.locator('[data-test="Americano"]').click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect(page.locator('[data-test="checkout"]')).toContainText(
-        "$7.00"
-      );
-      await page.getByRole("link", { name: "Cart page" }).click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect(page.locator('[data-test="checkout"]')).toContainText(
-        "$7.00"
-      );
+      const coffeeAmericano = page.locator('[data-test="Americano"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const cartPage = page.getByRole("link", { name: "Cart page" });
+
+      await coffeeAmericano.click();
+      await expect(checkout).toBeVisible();
+      await expect(checkout).toContainText("$7.00");
+      await cartPage.click();
+      await expect(checkout).toBeVisible();
+      await expect(checkout).toContainText("$7.00");
     }
   );
 
@@ -85,29 +95,35 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
-      await page.locator('[data-test="Flat_White"]').click();
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect(page.locator('[data-test="checkout"]')).toContainText(
-        "$18.00"
-      );
-      await page.getByRole("link", { name: "Cart page" }).click();
+      const coffeeFlat_White = page.locator('[data-test="Flat_White"]');
+      const checkout = page.locator('[data-test="checkout"]');
+      const cartPage = page.getByRole("link", { name: "Cart page" });
+      const name = page.getByRole("textbox", { name: "Name" });
+      const email = page.getByRole("textbox", { name: "Email" });
+      const checkbox = page.getByRole("checkbox", {
+        name: "Promotion checkbox",
+      });
+      const paymentDetails = page.getByRole("heading", {
+        name: "Payment details",
+      });
+      const submeetButton = page.getByRole("button", { name: "Submit" });
+
+      await coffeeFlat_White.click();
+      await expect(checkout).toBeVisible();
+      await expect(checkout).toContainText("$18.00");
+
+      await cartPage.click();
       await expect(page).toHaveTitle(/Coffee cart/);
-      await expect(page.locator('[data-test="checkout"]')).toBeVisible();
-      await expect(page.locator('[data-test="checkout"]')).toContainText(
-        "$18.00"
-      );
-      await page.locator('[data-test="checkout"]').click();
-      await page.getByRole("textbox", { name: "Name" }).fill("test");
-      await page.getByRole("textbox", { name: "Email" }).fill("test@gmail.com");
-      await page.getByRole("checkbox", { name: "Promotion checkbox" }).check();
-      await expect(
-        page.getByRole("heading", { name: "Payment details" })
-      ).toBeVisible();
-      await page.getByRole("button", { name: "Submit" }).click();
-      await expect(
-        page.getByRole("heading", { name: "Payment details" })
-      ).not.toBeVisible();
+      await expect(checkout).toBeVisible();
+      await expect(checkout).toContainText("$18.00");
+      await checkout.click();
+
+      await name.fill("test");
+      await email.fill("test@gmail.com");
+      await checkbox.check();
+      await expect(paymentDetails).toBeVisible();
+      await submeetButton.click();
+      await expect(paymentDetails).not.toBeVisible();
     }
   );
 
@@ -122,12 +138,17 @@ test.describe("Coffee-cart tests", () => {
       },
     },
     async ({ page }) => {
-      await page.goto("https://coffee-cart.app/");
-      await page.locator('[data-test="Cappuccino"]').click();
-      await page.locator('[data-test="Mocha"]').click();
-      await page.locator('[data-test="Flat_White"]').click();
-      await expect(page.getByText("It's your lucky day! Get an")).toBeVisible();
-      await expect(page.locator("#app")).toContainText(
+      const coffeeCappuccino = page.locator('[data-test="Cappuccino"]');
+      const coffeeMocha = page.locator('[data-test="Mocha"]');
+      const coffeeFlat_White = page.locator('[data-test="Flat_White"]');
+      const app = page.locator("#app");
+      const greeting = page.getByText("It's your lucky day! Get an");
+
+      await coffeeCappuccino.click();
+      await coffeeMocha.click();
+      await coffeeFlat_White.click();
+      await expect(greeting).toBeVisible();
+      await expect(app).toContainText(
         "It's your lucky day! Get an extra cup of Mocha for $4."
       );
     }
