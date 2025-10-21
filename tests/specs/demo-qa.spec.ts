@@ -46,41 +46,46 @@ test.describe("demo-qa tests", () => {
   );
 
   test(
-    "PS-002 Verify Mocha is successfully added to Total",
+    "PS-002 Verify all check boxes are clickable",
     {
       tag: ["@positive"],
       annotation: {
         type: "description",
-        description: "Mocha coffee is successfully added to Total",
+        description: "Verify all check boxes are clickable",
       },
     },
     async ({ page }) => {
+      const checkValidation = page.locator('//p[@class="mt-3"]/span');
+
       await page.goto("https://demoqa.com/radio-button");
-      //await page.getByText('Yes').check();
-      //await expect.soft(page.getByText('Yes')).toBeChecked();
-      await page.locator('//label[text()="Yes"]/preceding-sibling::input').isVisible();
-      await page.locator('//label[text()="Yes"]/preceding-sibling::input').check();
-      await expect(page.locator('//label[text()="Yes"]/preceding-sibling::input')).toBeChecked();
-      // await page.locator('//*[@id="userEmail"]').fill('asdasd@gmail.com');
-      // await page.locator('//*[@id="currentAddress"]').fill('fsdfsf');
-      // await page.locator('//*[@id="permanentAddress"]').fill('dfsdff');
-      // await page.locator('//*[@id="submit"]').click();
-    //   await expect.soft(page.locator('[data-test="checkout"]')).toBeVisible();
-    //   await expect
-    //     .soft(page.locator('[data-test="checkout"]'))
-    //     .toContainText("$8.00");
-    //   await page.locator('[data-test="checkout"]').hover();
-    //   await expect.soft(page.locator("#app")).toContainText("Mocha x 1+-");
+      await page.getByText('Yes').click();
+      //page.locator('//input[@id="yesRadio"]').click();
+      await expect(page.locator('label').filter({ hasText: 'Yes' })).toBeVisible();
+      await expect(checkValidation).toHaveText('Yes');
+
+      await page.getByText('Impressive').click();
+      await expect.soft(page.getByRole('radio', { name: 'Impressive' })).toBeVisible();
+      await expect.soft(checkValidation).toHaveText('Impressive');
+
+      await expect(page.getByText('No')).toBeVisible();
+      
+
+      
+      //await page.locator('//input[@id="yesRadio"]').click()
+      //await page.locator('//label[normalize-space()="Yes"]/preceding-sibling::input[@type="radio"]').check(); //*[@id="app"]/div/div/div/div[2]/div[2]/div[2]/label/text()
+      //await page.locator('//input[@id="yesRadio"]').check()
+      //await expect(page.locator('//label[text()="Yes"]/preceding-sibling::input')).toBeChecked();
+     
     }
   );
 
   test(
-    "PS-003 Verify Mocha is successfully added to Total",
+    "PS-003 Verify all check boxes are clickable",
     {
       tag: ["@positive"],
       annotation: {
         type: "description",
-        description: "Mocha coffee is successfully added to Total",
+        description: "Verify all check boxes are clickable",
       },
     },
     async ({ page }) => {
