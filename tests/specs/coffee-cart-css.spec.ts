@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
+import { title } from "process";
 
 test.describe("Coffee-cart tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("https://coffee-cart.app/");
   });
 
-  test(
-    "PS-001 Verify Mocha is successfully added to Total",
+  test("PS-001 Verify Mocha is successfully added to Total",
     {
       tag: ["@positive"],
       annotation: {
@@ -131,12 +131,12 @@ test.describe("Coffee-cart tests", () => {
     async ({ page }) => {
       const coffeeCappuccino = page.locator('[data-test="Cappuccino"]');
       const coffeeMocha = page.locator('[data-test="Mocha"]');
-      const coffeeFlat_White = page.locator('[data-test="Flat_White"]');
+      const coffeeFlatWhite = page.locator('[data-test="Flat_White"]');
       const app = page.locator("#app");
 
       await coffeeCappuccino.click();
       await coffeeMocha.click();
-      await coffeeFlat_White.click();
+      await coffeeFlatWhite.click();
       await expect
         .soft(app)
         .toContainText(

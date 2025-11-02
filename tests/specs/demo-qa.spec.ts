@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Locator } from "@playwright/test";
 import data from "../utils/data.json";
 
 test.describe("demo-qa tests", () => {
@@ -22,28 +22,28 @@ test.describe("demo-qa tests", () => {
       const permanentAddress = page.locator('//*[@id="permanentAddress"]');
       const submitButton = page.locator('//*[@id="submit"]');
       const name = page.locator('//*[@id="name"]');
-      const email_check = page.locator('//*[@id="email"]');
-      const currentAddress_check = page.locator('//p[@id="currentAddress"]');
-      const permanentAddress_check = page.locator(
+      const emailCheck = page.locator('//*[@id="email"]');
+      const currentAddressCheck = page.locator('//p[@id="currentAddress"]');
+      const permanentAddressCheck = page.locator(
         '//p[@id="permanentAddress"]'
       );
 
       await page.goto("https://demoqa.com/text-box");
-      const { full_name, email, current_address, permanent_address } =
+      const { full_name: fullName, email, current_address, permanent_address } =
         data.user;
-      await userName.fill(full_name);
+      await userName.fill(fullName);
       await userEmail.fill(email);
       await currentAddress.fill(current_address);
       await permanentAddress.fill(permanent_address);
       await submitButton.click();
       await expect.soft(name).toBeVisible();
-      await expect.soft(email_check).toBeVisible();
-      await expect.soft(currentAddress_check).toBeVisible();
-      await expect.soft(permanentAddress_check).toBeVisible();
+      await expect.soft(emailCheck).toBeVisible();
+      await expect.soft(currentAddressCheck).toBeVisible();
+      await expect.soft(permanentAddressCheck).toBeVisible();
       await expect.soft(name).toContainText("John Black");
-      await expect.soft(email_check).toContainText("test@gmail.com");
-      await expect.soft(currentAddress_check).toContainText("New York");
-      await expect.soft(permanentAddress_check).toContainText("Tokio");
+      await expect.soft(emailCheck).toContainText("test@gmail.com");
+      await expect.soft(currentAddressCheck).toContainText("New York");
+      await expect.soft(permanentAddressCheck).toContainText("Tokio");
     }
   );
 
@@ -57,23 +57,21 @@ test.describe("demo-qa tests", () => {
       },
     },
     async ({ page }) => {
-      const checkValidation = page.locator('//p[@class="mt-3"]/span');
-      const yes = page.locator('//input[@id="yesRadio"]');
-      const impressive = page.locator('//input[@id="impressiveRadio"]');
-      const no = page.locator('//label[@class="custom-control-label disabled"]');
+      const checkValidation= page.locator('//p[@class="mt-3"]/span');
+      const yes = page.locator('//*[@for="yesRadio"]');
+      const impressive = page.locator('//*[@for="impressiveRadio"]');
+      const no = page.locator('//*[@for="noRadio"]');
 
       await page.goto("https://demoqa.com/radio-button");
       await expect(yes).toBeVisible();
       await expect(yes).not.toBeChecked();
-      //await yes.check();
-      await page.getByText("Yes").check()
+      await yes.check();
       await expect.soft(yes).toBeChecked();
       await expect.soft(checkValidation).toHaveText("Yes");
 
       await expect(impressive).toBeVisible();
       await expect(impressive).not.toBeChecked();
-      //await impressive.check();
-      await page.getByText("Impressive").check();
+      await impressive.check();
       await expect.soft(impressive).toBeChecked();
       await expect.soft(checkValidation).toHaveText("Impressive");
 
@@ -91,13 +89,12 @@ test.describe("demo-qa tests", () => {
       },
     },
     async ({ page }) => {
-      //const toggleButton = (num: number) => page.locator(`(//button[@title="Toggle"])['${num}']`); //span[text()='downloads']
-      const toggleButton1 = page.locator('(//button[@title="Toggle"])[1]');
+      const toggleButton1= page.locator('(//button[@title="Toggle"])[1]');
       const toggleButton2 = page.locator('(//button[@title="Toggle"])[2]');
       const toggleButton3 = page.locator('(//button[@title="Toggle"])[3]');
       const toggleButton4 = page.locator('(//button[@title="Toggle"])[4]');
       const toggleButton5 = page.locator('(//button[@title="Toggle"])[5]');
-      const toggleButton6 = page.locator('(//button[@title="Toggle"])[6]');
+      const toggleButton6: Locator = page.locator('(//button[@title="Toggle"])[6]');
 
       const checkboxExcelFile = page.locator(
         '//label[@for="tree-node-excelFile"]/span[@class="rct-checkbox"]'
@@ -108,28 +105,28 @@ test.describe("demo-qa tests", () => {
       const verifyDisplayingDownloads = page.locator(
         '//*[@id="result"]//span[text()="downloads"]'
       );
-      const verifyDisplayingOffice = page.locator(
+      const verifyDisplayingOffice= page.locator(
         '//*[@id="result"]//span[text()="office"]'
       );
-      const checkboxWordFile = page.locator(
+      const checkboxWordFile= page.locator(
         '//label[@for="tree-node-wordFile"]/span[@class="rct-checkbox"]'
       );
-      const checkboxDownloads = page.locator(
+      const checkboxDownloads= page.locator(
         '//label[@for="tree-node-downloads"]/span[@class="rct-checkbox"]'
       );
-      const checkboxGeneral = page.locator(
+      const checkboxGeneral= page.locator(
         '//label[@for="tree-node-general"]/span[@class="rct-checkbox"]'
       );
-      const checkboxClassified = page.locator(
+      const checkboxClassified= page.locator(
         '//label[@for="tree-node-classified"]/span[@class="rct-checkbox"]'
       );
-      const checkboxPrivate = page.locator(
+      const checkboxPrivate= page.locator(
         '//label[@for="tree-node-private"]/span[@class="rct-checkbox"]'
       );
-      const checkboxPublic = page.locator(
+      const checkboxPublic= page.locator(
         '//label[@for="tree-node-public"]/span[@class="rct-checkbox"]'
       );
-      const checkboxOffice = page.locator(
+      const checkboxOffice= page.locator(
         '//label[@for="tree-node-office"]/span[@class="rct-checkbox"]'
       );
 
@@ -184,3 +181,4 @@ test.describe("demo-qa tests", () => {
     }
   );
 });
+
